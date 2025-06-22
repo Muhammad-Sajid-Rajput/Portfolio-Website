@@ -1,3 +1,5 @@
+import {icons} from './utils/icons.js';
+
 document.addEventListener("DOMContentLoaded", () => {
     const toggleBtn = document.querySelector('.theme-toggle');
     const body = document.body;
@@ -33,4 +35,19 @@ document.addEventListener("DOMContentLoaded", () => {
         threshold: 0.2
     });
     cards.forEach(card => observer.observe(card));
+    renderSkills();
 });
+
+function renderSkills() {
+    let html = '';
+
+    icons.forEach(element => {
+        html += `<div class="skill-box">
+        <iconify-icon icon="${element.icon}"></iconify-icon>
+        <span>${element.name}</span>
+      </div>`;
+
+    });
+
+    document.querySelector('.js-skills').innerHTML = html;
+}    
