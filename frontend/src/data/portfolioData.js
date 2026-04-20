@@ -119,7 +119,7 @@ export const projects = [
     dateRange: "Apr 2026",
     description:
       "A production-ready full-stack e-commerce platform inspired by Amazon. Features include product browsing and search, shopping cart management, seamless checkout flow, order tracking, and responsive UI. Built with a modern React frontend and a robust Express.js backend using Sequelize ORM and SQLite database.",
-    image: ecommerceImage, // add your banner/image import
+    image: ecommerceImage, 
     github: "https://github.com/Muhammad-Sajid-Rajput/ecommerce-project",
     technologies: [
       "React",

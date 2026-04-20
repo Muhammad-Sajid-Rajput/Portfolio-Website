@@ -1,8 +1,8 @@
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Reveal from "../ui/Reveal";
 import SectionWrapper from "../ui/SectionWrapper";
-import Button from "../ui/Button";
+import ProjectCard from "../ui/ProjectCard";
 import { ANIMATION_DELAYS } from "../../constants/animations";
 
 const PAGINATION_CONFIG = {
@@ -13,26 +13,28 @@ const PAGINATION_CONFIG = {
 
 function ProjectsSection({ projects }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const sliderRef = useRef(null);
   const { ITEMS_PER_PAGE, DELAY_NAV, DELAY_INDICATORS } = PAGINATION_CONFIG;
   const totalPages = Math.ceil(projects.length / ITEMS_PER_PAGE);
-  const hasMoreProjects = currentIndex + ITEMS_PER_PAGE < projects.length;
-
-  const currentProjects = projects.slice(
-    currentIndex,
-    currentIndex + ITEMS_PER_PAGE,
-  );
+  const canGoPrev = currentIndex > 0;
+  const canGoNext = currentIndex + ITEMS_PER_PAGE < projects.length;
 
   const handleNext = () => {
-    if (hasMoreProjects) {
-      setCurrentIndex(currentIndex + ITEMS_PER_PAGE);
+    if (canGoNext) {
+      const newIndex = currentIndex + ITEMS_PER_PAGE;
+      setCurrentIndex(newIndex);
     }
   };
 
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - ITEMS_PER_PAGE);
+    if (canGoPrev) {
+      const newIndex = currentIndex - ITEMS_PER_PAGE;
+      setCurrentIndex(newIndex);
     }
   };
+
+  // Calculate translate percentage based on items per page
+  const translatePercentage = (currentIndex / ITEMS_PER_PAGE) * 100;
 
   return (
     <SectionWrapper
@@ -44,91 +46,83 @@ function ProjectsSection({ projects }) {
           "Selected work that reflects my approach to product thinking, UI craftsmanship, and engineering quality.",
       }}
     >
-      <div className="space-y-8">
-        <div className="grid grid-cols-1 items-stretch gap-5 md:grid-cols-3">
-          {currentProjects.map((project, index) => (
-            <Reveal
-              key={project.github}
-              delay={index * ANIMATION_DELAYS.STAGGERED}
-              className="h-full"
-            >
-              <article className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-app-outline/25 bg-app-surface/50 transition-all duration-300 hover:border-app-outline/50 hover:shadow-lg">
-                {/* Image Container */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-app-bg sm:aspect-[16/9]">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-app-surface/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                </div>
-
-                <div className="flex flex-1 flex-col p-5 sm:p-6">
-                  <div className="mb-3 flex items-start justify-between gap-3">
-                    <p className="text-overline font-semibold uppercase text-app-secondary">
-                      {project.dateRange}
-                    </p>
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-shrink-0 text-app-muted transition-colors hover:text-app-primary"
-                    >
-                      <Icon icon="mdi:arrow-top-right" className="text-lg" />
-                    </a>
-                  </div>
-
-                  <h3 className="line-clamp-2 min-h-[3.25rem] text-title font-semibold text-app-text">
-                    {project.title}
-                  </h3>
-
-                  <p className="mt-2.5 line-clamp-3 text-body-sm text-app-muted">
-                    {project.description}
-                  </p>
-
-                  <div className="mt-auto pt-4 flex flex-wrap gap-2">
-                    {project.technologies?.map((tech) => (
-                      <span
-                        key={tech}
-                        className="inline-flex rounded-md bg-app-primary/15 px-2 py-0.5 text-caption font-medium text-app-text"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-
+      {/* Main container with minimal padding for arrows */}
+      <div className="relative px-2 sm:px-8 lg:px-12">
+        {/* Navigation Arrows - Vertically centered on sides */}
         {totalPages > 1 && (
-          <Reveal delay={DELAY_NAV} className="flex justify-end gap-2">
-            <Button
-              variant="icon"
-              onClick={handlePrev}
-              disabled={currentIndex === 0}
-              aria-label="Previous projects"
-            >
-              <Icon icon="mdi:chevron-left" className="text-xl" />
-            </Button>
-            <Button
-              variant="icon"
-              onClick={handleNext}
-              disabled={!hasMoreProjects}
-              aria-label="Next projects"
-            >
-              <Icon icon="mdi:chevron-right" className="text-xl" />
-            </Button>
-          </Reveal>
+          <>
+            {/* Previous Arrow - Only show when can go back */}
+            {canGoPrev && (
+              <button
+                onClick={handlePrev}
+                className="absolute -left-3 sm:-left-5 top-1/2 z-20 -translate-y-1/2 flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-app-surface/95 border border-app-outline/40 text-app-text shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-app-primary/50 hover:shadow-xl"
+                aria-label="Previous projects"
+              >
+                <Icon icon="mdi:chevron-left" className="text-xl sm:text-2xl" />
+              </button>
+            )}
+
+            {/* Next Arrow - Only show when can go forward */}
+            {canGoNext && (
+              <button
+                onClick={handleNext}
+                className="absolute -right-3 sm:-right-5 top-1/2 z-20 -translate-y-1/2 flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-app-surface/95 border border-app-outline/40 text-app-text shadow-lg backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-app-primary/50 hover:shadow-xl"
+                aria-label="Next projects"
+              >
+                <Icon
+                  icon="mdi:chevron-right"
+                  className="text-xl sm:text-2xl"
+                />
+              </button>
+            )}
+          </>
         )}
 
+        {/* Projects Slider Container */}
+        <div className="overflow-hidden">
+          <div
+            ref={sliderRef}
+            className="flex gap-6 lg:gap-8 transition-transform duration-500 ease-out"
+            style={{
+              transform: `translateX(-${translatePercentage}%)`,
+            }}
+          >
+            {projects.map((project, index) => (
+              <div
+                key={project.github}
+                className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-22px)] flex-shrink-0"
+                style={{
+                  opacity:
+                    index >= currentIndex &&
+                    index < currentIndex + ITEMS_PER_PAGE
+                      ? 1
+                      : 0.4,
+                  transition: "opacity 0.3s ease",
+                }}
+              >
+                <Reveal
+                  delay={(index % ITEMS_PER_PAGE) * ANIMATION_DELAYS.STAGGERED}
+                  className="h-full"
+                >
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block h-full"
+                  >
+                    <ProjectCard project={project} />
+                  </a>
+                </Reveal>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Page Indicators */}
         {totalPages > 1 && (
           <Reveal
             delay={DELAY_INDICATORS}
-            className="flex justify-center gap-2"
+            className="mt-10 flex justify-center gap-2"
           >
             {Array.from({ length: totalPages }).map((_, i) => (
               <button
@@ -143,6 +137,15 @@ function ProjectsSection({ projects }) {
               />
             ))}
           </Reveal>
+        )}
+
+        {/* Empty state when no projects */}
+        {projects.length === 0 && (
+          <div className="py-16 text-center">
+            <p className="text-body text-app-muted">
+              No projects to display yet.
+            </p>
+          </div>
         )}
       </div>
     </SectionWrapper>
