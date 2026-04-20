@@ -2,6 +2,7 @@ import rockPaperScissorsImage from "../assets/images/rock-paper-scissors.svg";
 import unirideImage from "../assets/images/Uniride.webp";
 import pizzaPalaceImage from "../assets/images/Pizza-Palace.webp";
 import profileImage from "../assets/images/Profile-Picture.jpg";
+import ecommerceImage from "../assets/images/E-commerce.webp";
 
 export const heroContent = {
   name: "Muhammad Sajid",
@@ -111,6 +112,23 @@ export const projects = [
       "Express",
       "MongoDB",
       "JWT",
+    ],
+  },
+  {
+    title: "Full-Stack E-Commerce Application (Amazon Clone)",
+    dateRange: "Apr 2026",
+    description:
+      "A production-ready full-stack e-commerce platform inspired by Amazon. Features include product browsing and search, shopping cart management, seamless checkout flow, order tracking, and responsive UI. Built with a modern React frontend and a robust Express.js backend using Sequelize ORM and SQLite database.",
+    image: ecommerceImage, // add your banner/image import
+    github: "https://github.com/Muhammad-Sajid-Rajput/ecommerce-project",
+    technologies: [
+      "React",
+      "Vite",
+      "Axios",
+      "Node.js",
+      "Express.js",
+      "Sequelize",
+      "SQLite",
     ],
   },
   {

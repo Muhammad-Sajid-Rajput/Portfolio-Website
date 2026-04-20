@@ -54,14 +54,15 @@ function ProjectsSection({ projects }) {
             >
               <article className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-app-outline/25 bg-app-surface/50 transition-all duration-300 hover:border-app-outline/50 hover:shadow-lg">
                 {/* Image Container */}
-                <div className="relative h-56 overflow-hidden bg-app-bg">
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-app-bg sm:aspect-[16/9]">
                   <img
                     src={project.image}
                     alt={project.title}
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-app-surface/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </div>
 
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
