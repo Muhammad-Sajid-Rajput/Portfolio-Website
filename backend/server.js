@@ -128,11 +128,57 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
       subject: `New portfolio message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `
-        <h2>New Portfolio Contact Message</h2>
-        <p><strong>Name:</strong> ${safeName}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Message:</strong></p>
-        <p>${safeMessage}</p>
+        <div style="margin:0;padding:0;background:#1a181a;font-family:Arial,Helvetica,sans-serif;color:#f5f5f5;">
+          <div style="max-width:600px;margin:0 auto;padding:24px 16px;">
+            <div style="border:1px solid #444448;border-radius:14px;background:#242424;overflow:hidden;">
+              <div style="padding:18px 22px;border-bottom:1px solid #444448;background:#2e2e32;">
+                <div style="font-size:12px;line-height:1.4;letter-spacing:0.08em;text-transform:uppercase;color:#f9ce34;font-weight:700;">
+                  Portfolio Website
+                </div>
+                <h2 style="margin:8px 0 0;font-size:22px;line-height:1.3;color:#f5f5f5;">
+                  New Contact Message
+                </h2>
+              </div>
+
+              <div style="padding:22px;">
+                <p style="margin:0 0 18px;font-size:14px;line-height:1.7;color:#ababb4;">
+                  A visitor submitted the contact form.
+                </p>
+
+                <div style="margin-bottom:14px;">
+                  <div style="font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#7b8392;margin-bottom:4px;">
+                    Name
+                  </div>
+                  <div style="font-size:15px;line-height:1.6;color:#f5f5f5;">
+                    ${safeName}
+                  </div>
+                </div>
+
+                <div style="margin-bottom:18px;">
+                  <div style="font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#7b8392;margin-bottom:4px;">
+                    Email
+                  </div>
+                  <div style="font-size:15px;line-height:1.6;color:#f9ce34;">
+                    ${safeEmail}
+                  </div>
+                </div>
+
+                <div style="padding-top:16px;border-top:1px solid #444448;">
+                  <div style="font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#7b8392;margin-bottom:8px;">
+                    Message
+                  </div>
+                  <div style="font-size:15px;line-height:1.8;color:#f5f5f5;white-space:normal;">
+                    ${safeMessage}
+                  </div>
+                </div>
+              </div>
+
+              <div style="padding:14px 22px;border-top:1px solid #444448;font-size:12px;line-height:1.6;color:#7b8392;">
+                Sent from the portfolio contact form.
+              </div>
+            </div>
+          </div>
+        </div>
       `,
     });
 

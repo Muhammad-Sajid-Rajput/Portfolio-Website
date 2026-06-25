@@ -1,151 +1,120 @@
-# Personal Portfolio Website
+# Portfolio Website
 
-A modern, responsive portfolio website built with React and Tailwind CSS to showcase projects, skills, and frontend development expertise.
+A personal portfolio website built with React, Vite, Tailwind CSS, and a small Express backend for the contact form.
 
-![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?logo=tailwind-css&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-8.0.1-646CFF?logo=vite&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
+## Overview
 
-## 🚀 Live Demo
+The frontend presents a single-page portfolio with sections for the hero, about, skills, projects, achievements, and contact details. The backend handles contact form submissions and sends email through SMTP.
 
-**[View Live Site](https://your-portfolio-link.com)**
+## Tech Stack
 
-## ✨ Features
+- React 19
+- Vite
+- Tailwind CSS
+- Framer Motion
+- Iconify
+- Express
+- Nodemailer
 
-- **Responsive Design** – Fully optimized for desktop, tablet, and mobile devices
-- **Modern UI/UX** – Clean aesthetics with smooth animations and transitions
-- **Project Showcase** – Horizontal slider with intuitive navigation
-- **Interactive Components** – Hover effects, scroll animations, and dynamic content
-- **Performance Optimized** – Fast loading with lazy image loading and code splitting
-- **Reusable Components** – Modular architecture with custom hooks and UI components
-- **Dark Theme** – Professional dark mode design throughout
+## Features
 
-## 🛠️ Tech Stack
+- Responsive single-page layout
+- Animated hero and section reveals
+- Project showcase with card-based navigation
+- Contact form with validation and rate limiting
+- Reusable UI components and shared portfolio data
 
-| Category | Technologies |
-|----------|--------------|
-| **Framework** | React 19 |
-| **Styling** | Tailwind CSS 3.4 |
-| **Build Tool** | Vite 8 |
-| **Animation** | Framer Motion |
-| **Icons** | Iconify React |
-| **Forms** | Tailwind CSS Forms |
+## Project Structure
 
-## 📸 Screenshots
+```text
+Portfolio-Website/
+  backend/
+    server.js
+    package.json
+  frontend/
+    public/
+    src/
+    index.html
+    vite.config.js
+  README.md
+```
 
-| Hero Section | Projects Section |
-|-------------|------------------|
-| ![Hero](https://via.placeholder.com/400x250/1a1a1a/ffffff?text=Hero+Section) | ![Projects](https://via.placeholder.com/400x250/1a1a1a/ffffff?text=Projects+Section) |
-
-| Skills Section | Contact Section |
-|---------------|-----------------|
-| ![Skills](https://via.placeholder.com/400x250/1a1a1a/ffffff?text=Skills+Section) | ![Contact](https://via.placeholder.com/400x250/1a1a1a/ffffff?text=Contact+Section) |
-
-## 📦 Installation & Setup
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-
-### Clone the Repository
-
-```bash
-git clone https://github.com/Muhammad-Sajid-Rajput/Portfolio-Website.git
-cd Portfolio-Website/frontend
-```
+- Node.js 18 or newer
+- npm
 
 ### Install Dependencies
 
+From the repository root:
+
 ```bash
-npm install
+npm run install:all
 ```
 
-### Start Development Server
+Or install each app separately:
+
+```bash
+npm install --prefix backend
+npm install --prefix frontend
+```
+
+### Run in Development
+
+Start both apps together from the repository root:
 
 ```bash
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
-
-### Build for Production
+Frontend development server:
 
 ```bash
-npm run build
+npm run dev:frontend
 ```
 
-## 🚀 Usage
+Backend development server:
 
-Navigate to different sections using the header menu:
-
-- **Home** – Hero section with introduction
-- **About** – Personal background and summary
-- **Projects** – Featured work with horizontal slider
-- **Expertise** – Skills and technologies
-- **Achievements** – Notable accomplishments
-- **Contact** – Contact form and information
-
-## 📁 Folder Structure
-
-```
-Portfolio-Website/
-├── backend/                 # Backend server files
-│   ├── server.js
-│   └── package.json
-├── frontend/                # React frontend application
-│   ├── public/             # Static assets
-│   ├── src/
-│   │   ├── assets/         # Images and media
-│   │   ├── components/     # React components
-│   │   │   ├── layout/     # Layout components (Header, Footer)
-│   │   │   ├── sections/   # Page sections (Hero, Projects, etc.)
-│   │   │   └── ui/         # Reusable UI components
-│   │   ├── constants/      # Animation and config constants
-│   │   ├── context/        # React context providers
-│   │   ├── data/           # Portfolio data
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── App.jsx         # Main application component
-│   │   └── main.jsx        # Application entry point
-│   ├── index.css           # Global styles and Tailwind
-│   └── tailwind.config.js  # Tailwind configuration
-└── README.md
+```bash
+npm run dev:backend
 ```
 
-## 🔮 Future Improvements
+The frontend runs on `http://localhost:5173` and proxies `/api` requests to the backend on `http://localhost:5000`.
 
-- [ ] Add blog section for technical articles
-- [ ] Implement theme toggle (light/dark mode)
-- [ ] Add project filtering by technology
-- [ ] Integrate CMS for dynamic content
-- [ ] Add analytics dashboard
-- [ ] Implement service worker for offline access
+## Backend Environment Variables
 
-## 🤝 Contributing
+Create a backend `.env` file with the SMTP settings required for sending contact emails:
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+```env
+PORT=5000
+FRONTEND_ORIGIN=http://localhost:5173
+CONTACT_RECEIVER=you@example.com
+SMTP_HOST=smtp.example.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=you@example.com
+SMTP_PASS=your-smtp-password
+FROM_EMAIL=you@example.com
+```
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+The backend validates `CONTACT_RECEIVER` on startup and returns `503` from the contact endpoint until SMTP is configured.
 
-## 📄 License
+## Build
 
-This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+Build the frontend for production:
 
-## 📬 Contact
+```bash
+npm run build --prefix frontend
+```
 
-**Muhammad Sajid Rajput**
+## Contact
 
-- 📧 Email: your.email@example.com
-- 💼 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
-- 🐙 GitHub: [@Muhammad-Sajid-Rajput](https://github.com/Muhammad-Sajid-Rajput)
-- 🌐 Portfolio: [your-portfolio-link.com](https://your-portfolio-link.com)
+- Email: muhammadsajidrajput20@gmail.com
+- GitHub: https://github.com/Muhammad-Sajid-Rajput
+- LinkedIn: https://www.linkedin.com/in/muhammad-sajid-066248264/
 
----
+## License
 
-<p align="center">
-  Built with ❤️ using React and Tailwind CSS
-</p>
+This project is licensed under the MIT License.

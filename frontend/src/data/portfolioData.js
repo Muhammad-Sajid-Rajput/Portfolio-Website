@@ -175,8 +175,8 @@ export const achievements = [
 export const contactInfo = [
   {
     label: "Email",
-    value: "sajidrajp5@gmail.com",
-    href: "mailto:sajidrajp5@gmail.com",
+    value: "muhammadsajidrajput20@gmail.com",
+    href: "mailto:muhammadsajidrajput20@gmail.com",
     icon: "mdi:email-outline",
     tone: "app-primary",
   },

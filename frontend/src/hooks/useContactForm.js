@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { submitContact } from "../services/contactService";
 
 const initialFormData = {
@@ -17,6 +17,18 @@ function useContactForm() {
   const [formData, setFormData] = useState(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formStatus, setFormStatus] = useState({ type: "", message: "" });
+  const successTimeoutRef = useRef(null);
+
+  const clearSuccessTimeout = () => {
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+      successTimeoutRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => clearSuccessTimeout();
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -30,6 +42,7 @@ function useContactForm() {
       return;
     }
 
+    clearSuccessTimeout();
     setIsSubmitting(true);
     setFormStatus({ type: "", message: "" });
 
@@ -40,7 +53,12 @@ function useContactForm() {
         type: "success",
         message: result.message,
       });
+      successTimeoutRef.current = setTimeout(() => {
+        setFormStatus({ type: "", message: "" });
+        successTimeoutRef.current = null;
+      }, 5000);
     } catch (error) {
+      clearSuccessTimeout();
       setFormStatus({
         type: "error",
         message: error.message || "Something went wrong. Please try again.",
