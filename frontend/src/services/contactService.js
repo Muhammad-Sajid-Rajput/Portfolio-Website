@@ -3,7 +3,10 @@
  * Extracted from useContactForm hook to separate concerns
  */
 
-const API_ENDPOINT = "/api/contact";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || "";
+const API_ENDPOINT = API_BASE_URL
+  ? `${API_BASE_URL.replace(/\/$/, "")}/api/contact`
+  : "/api/contact";
 
 /**
  * Parse response payload from API, handling different content types
