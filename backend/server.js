@@ -8,6 +8,7 @@ dotenv.config();
 
 const app = express();
 app.disable('x-powered-by');
+app.set('trust proxy', 1);
 
 const port = Number(process.env.PORT || 5000);
 const frontendOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173')
@@ -20,6 +21,7 @@ const contactReceiver = (process.env.CONTACT_RECEIVER || contactReceiverPlacehol
 const smtpHost = process.env.SMTP_HOST;
 const smtpPort = Number(process.env.SMTP_PORT || 465);
 const smtpSecure = String(process.env.SMTP_SECURE ?? 'true').toLowerCase() === 'true';
+const smtpFamily = Number(process.env.SMTP_FAMILY || 4);
 const smtpUser = process.env.SMTP_USER;
 const smtpPass = process.env.SMTP_PASS;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,6 +56,7 @@ const transporter =
         host: smtpHost,
         port: smtpPort,
         secure: smtpSecure,
+        family: smtpFamily,
         auth: {
           user: smtpUser,
           pass: smtpPass,
@@ -190,7 +193,10 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
     });
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Failed to send contact email`);
-    console.error(error);
+    console.error(error?.message || error);
+    if (error?.stack) {
+      console.error(error.stack);
+    }
 
     return response.status(500).json({
       message: 'Unable to send your message right now. Please try again later.',
