@@ -4,7 +4,7 @@ A personal portfolio website built with React, Vite, Tailwind CSS, and a small E
 
 ## Overview
 
-The frontend presents a single-page portfolio with sections for the hero, about, skills, projects, achievements, and contact details. The backend handles contact form submissions and sends email through SMTP.
+The frontend presents a single-page portfolio with sections for the hero, about, skills, projects, achievements, and contact details. The backend handles contact form submissions and sends email through the Resend API.
 
 ## Tech Stack
 
@@ -14,7 +14,7 @@ The frontend presents a single-page portfolio with sections for the hero, about,
 - Framer Motion
 - Iconify
 - Express
-- Nodemailer
+- Resend
 
 ## Features
 
@@ -85,21 +85,16 @@ The frontend runs on `http://localhost:5173` and proxies `/api` requests to the 
 
 ## Backend Environment Variables
 
-Create a backend `.env` file with the SMTP settings required for sending contact emails:
+Create a backend `.env` file with the Resend settings required for sending contact emails:
 
 ```env
 PORT=5000
 FRONTEND_ORIGIN=http://localhost:5173
 CONTACT_RECEIVER=you@example.com
-SMTP_HOST=smtp.example.com
-SMTP_PORT=465
-SMTP_SECURE=true
-SMTP_USER=you@example.com
-SMTP_PASS=your-smtp-password
-FROM_EMAIL=you@example.com
+RESEND_API_KEY=re_your_resend_api_key
 ```
 
-The backend validates `CONTACT_RECEIVER` on startup and returns `503` from the contact endpoint until SMTP is configured.
+The backend validates `CONTACT_RECEIVER` on startup and returns `503` from the contact endpoint until `RESEND_API_KEY` is configured.
 
 ## Build
 

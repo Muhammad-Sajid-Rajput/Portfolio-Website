@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const nodemailer = require('nodemailer');
 const rateLimit = require('express-rate-limit');
 
 dotenv.config();
@@ -17,13 +16,10 @@ const frontendOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173')
   .filter(Boolean);
 const contactReceiverPlaceholder = 'contact@example.com';
 const contactReceiver = (process.env.CONTACT_RECEIVER || contactReceiverPlaceholder).trim();
+const resendApiKey = process.env.RESEND_API_KEY?.trim();
+const resendApiUrl = 'https://api.resend.com/emails';
+const resendFrom = 'Portfolio Contact <onboarding@resend.dev>';
 
-const smtpHost = process.env.SMTP_HOST;
-const smtpPort = Number(process.env.SMTP_PORT || 465);
-const smtpSecure = String(process.env.SMTP_SECURE ?? 'true').toLowerCase() === 'true';
-const smtpFamily = Number(process.env.SMTP_FAMILY || 4);
-const smtpUser = process.env.SMTP_USER;
-const smtpPass = process.env.SMTP_PASS;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 if (!process.env.CONTACT_RECEIVER?.trim() || contactReceiver === contactReceiverPlaceholder) {
@@ -36,7 +32,6 @@ if (!emailPattern.test(contactReceiver)) {
   throw new Error('CONTACT_RECEIVER must be a valid email address.');
 }
 
-const fromEmail = process.env.FROM_EMAIL || smtpUser || contactReceiver;
 const limits = {
   nameMax: 80,
   emailMax: 254,
@@ -50,20 +45,6 @@ const contactLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-const transporter =
-  smtpHost && smtpUser && smtpPass
-    ? nodemailer.createTransport({
-        host: smtpHost,
-        port: smtpPort,
-        secure: smtpSecure,
-        family: smtpFamily,
-        auth: {
-          user: smtpUser,
-          pass: smtpPass,
-        },
-      })
-    : null;
-
 const escapeHtml = (value = '') =>
   String(value)
     .replace(/&/g, '&amp;')
@@ -71,6 +52,71 @@ const escapeHtml = (value = '') =>
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+
+const logError = (label, error) => {
+  console.error(label);
+
+  if (error instanceof Error) {
+    console.error(error.message);
+
+    if (error.details) {
+      console.error(
+        typeof error.details === 'string' ? error.details : JSON.stringify(error.details, null, 2)
+      );
+    }
+
+    if (error.stack) {
+      console.error(error.stack);
+    }
+
+    return;
+  }
+
+  console.error(error);
+};
+
+const parseJsonResponse = async (response) => {
+  const rawBody = await response.text();
+
+  if (!rawBody) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawBody);
+  } catch {
+    return { rawBody };
+  }
+};
+
+const sendResendEmail = async (payload) => {
+  if (!resendApiKey) {
+    throw new Error('RESEND_API_KEY is not configured.');
+  }
+
+  const response = await fetch(resendApiUrl, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${resendApiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const responseBody = await parseJsonResponse(response);
+
+  if (!response.ok) {
+    const error = new Error(
+      responseBody?.message ||
+        `Resend request failed with status ${response.status} ${response.statusText}`
+    );
+    error.status = response.status;
+    error.details = responseBody;
+    throw error;
+  }
+
+  return responseBody;
+};
 
 app.use(
   cors({
@@ -84,7 +130,8 @@ app.get('/api/health', (_request, response) => {
   response.status(200).json({
     status: 'ok',
     message: 'Portfolio backend is running.',
-    mailReady: Boolean(transporter),
+    mailProvider: 'resend',
+    mailReady: Boolean(resendApiKey),
   });
 });
 
@@ -113,9 +160,9 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
     });
   }
 
-  if (!transporter) {
+  if (!resendApiKey) {
     return response.status(503).json({
-      message: 'Email service is not configured yet. Please set SMTP environment variables.',
+      message: 'Email service is not configured yet. Please set RESEND_API_KEY.',
     });
   }
 
@@ -124,10 +171,9 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
   const safeMessage = escapeHtml(message).replace(/\n/g, '<br/>');
 
   try {
-    const mailResult = await transporter.sendMail({
-      from: `Portfolio Contact <${fromEmail}>`,
-      to: contactReceiver,
-      replyTo: email,
+    const mailResult = await sendResendEmail({
+      from: resendFrom,
+      to: [contactReceiver],
       subject: `New portfolio message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `
@@ -183,20 +229,23 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
           </div>
         </div>
       `,
+      headers: {
+        'Reply-To': email,
+      },
     });
 
     console.log(`[${new Date().toISOString()}] Contact inquiry emailed`);
-    console.log({ messageId: mailResult.messageId, to: contactReceiver });
+    console.log({
+      messageId: mailResult?.id,
+      to: contactReceiver,
+      provider: 'resend',
+    });
 
     return response.status(200).json({
       message: 'Message sent successfully. Thank you for reaching out!',
     });
   } catch (error) {
-    console.error(`[${new Date().toISOString()}] Failed to send contact email`);
-    console.error(error?.message || error);
-    if (error?.stack) {
-      console.error(error.stack);
-    }
+    logError(`[${new Date().toISOString()}] Failed to send contact email`, error);
 
     return response.status(500).json({
       message: 'Unable to send your message right now. Please try again later.',
@@ -212,5 +261,5 @@ app.listen(port, () => {
   console.log(`Portfolio backend server listening on http://localhost:${port}`);
   console.log(`Allowed frontend origins: ${frontendOrigins.join(', ')}`);
   console.log(`Contact receiver: ${contactReceiver}`);
-  console.log(`SMTP configured: ${Boolean(transporter)}`);
+  console.log(`Resend configured: ${Boolean(resendApiKey)}`);
 });
