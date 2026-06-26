@@ -1,12 +1,21 @@
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 
 function ProjectCard({ project }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
+  const descRef = useRef(null);
+
+  // Detect whether line-clamp actually clips the text
+  useLayoutEffect(() => {
+    const el = descRef.current;
+    if (!el) return;
+    setIsClamped(el.scrollHeight > el.clientHeight);
+  }, [project.description]);
 
   return (
     <article className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-app-outline/25 bg-app-surface/50 transition-all duration-300 hover:border-app-outline/50 hover:shadow-lg hover:scale-[1.02]">
-      {/* Image Container - Auto height to show full image without cropping */}
+      {/* Image Container */}
       <div className="relative w-full overflow-hidden rounded-xl bg-gradient-to-br from-app-surfaceHigh/60 via-app-surface/40 to-app-surfaceHigh/60">
         <div className="flex items-center justify-center p-4">
           <img
@@ -36,18 +45,19 @@ function ProjectCard({ project }) {
         {/* Description with line-clamp and Read More toggle */}
         <div className="mt-3">
           <p
+            ref={descRef}
             className={`text-body text-app-muted leading-relaxed ${
               isExpanded ? "" : "line-clamp-3"
             }`}
           >
             {project.description}
           </p>
-          {project.description.length > 120 && (
+          {(isClamped || isExpanded) && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                setIsExpanded(!isExpanded);
+                setIsExpanded((prev) => !prev);
               }}
               className="mt-2 text-body-sm font-medium text-app-primary transition-colors hover:text-app-primaryDim"
             >

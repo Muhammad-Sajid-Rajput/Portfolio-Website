@@ -32,6 +32,14 @@ if (!emailPattern.test(contactReceiver)) {
   throw new Error('CONTACT_RECEIVER must be a valid email address.');
 }
 
+if (!resendApiKey) {
+  throw new Error('RESEND_API_KEY is not configured. Set RESEND_API_KEY to your Resend API key.');
+}
+
+if (!resendApiKey) {
+  throw new Error('RESEND_API_KEY is not configured.');
+}
+
 const limits = {
   nameMax: 80,
   emailMax: 254,
@@ -126,6 +134,13 @@ app.use(
 );
 app.use(express.json({ limit: '20kb' }));
 
+// Request logging middleware
+app.use((request, _response, next) => {
+  const ts = new Date().toISOString();
+  console.log(`[${ts}] ${request.method} ${request.path} - ip: ${request.ip}`);
+  next();
+});
+
 app.get('/api/health', (_request, response) => {
   response.status(200).json({
     status: 'ok',
@@ -138,6 +153,7 @@ app.get('/api/health', (_request, response) => {
 app.post('/api/contact', contactLimiter, async (request, response) => {
   const name = String(request.body?.name || '').trim();
   const email = String(request.body?.email || '').trim();
+  const subject = String(request.body?.subject || '').trim();
   const message = String(request.body?.message || '').trim();
 
   if (!name || !email || !message) {
@@ -160,21 +176,20 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
     });
   }
 
-  if (!resendApiKey) {
-    return response.status(503).json({
-      message: 'Email service is not configured yet. Please set RESEND_API_KEY.',
-    });
-  }
-
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
+  const safeSubject = escapeHtml(subject);
   const safeMessage = escapeHtml(message).replace(/\n/g, '<br/>');
+  const subjectLine = subject
+    ? `New Contact | ${subject} | ${name} | ${email}`
+    : `New Contact | ${name} | ${email}`;
 
   try {
     const mailResult = await sendResendEmail({
       from: resendFrom,
       to: [contactReceiver],
-      subject: `New portfolio message from ${name}`,
+      reply_to: safeEmail,
+      subject: subjectLine,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `
         <div style="margin:0;padding:0;background:#1a181a;font-family:Arial,Helvetica,sans-serif;color:#f5f5f5;">
@@ -212,6 +227,19 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
                   </div>
                 </div>
 
+                ${subject
+                  ? `
+                <div style="margin-bottom:18px;">
+                  <div style="font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#7b8392;margin-bottom:4px;">
+                    Subject
+                  </div>
+                  <div style="font-size:15px;line-height:1.6;color:#f5f5f5;">
+                    ${safeSubject}
+                  </div>
+                </div>
+                `
+                  : ''}
+
                 <div style="padding-top:16px;border-top:1px solid #444448;">
                   <div style="font-size:12px;line-height:1.4;letter-spacing:0.06em;text-transform:uppercase;color:#7b8392;margin-bottom:8px;">
                     Message
@@ -229,9 +257,6 @@ app.post('/api/contact', contactLimiter, async (request, response) => {
           </div>
         </div>
       `,
-      headers: {
-        'Reply-To': email,
-      },
     });
 
     console.log(`[${new Date().toISOString()}] Contact inquiry emailed`);

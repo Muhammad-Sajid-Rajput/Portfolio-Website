@@ -18,13 +18,11 @@ import {
   skills,
   socialLinks,
 } from "./data/portfolioData";
-import useContactForm from "./hooks/useContactForm";
 import { AppProvider } from "./context/AppContext";
-
 import InteractiveDotsBackground from "./components/ui/InteractiveDotsBackground";
+import ErrorBoundary from "./components/ui/ErrorBoundary";
 
 function App() {
-  const formState = useContactForm();
   const currentYear = useMemo(() => new Date().getFullYear(), []);
 
   return (
@@ -34,23 +32,29 @@ function App() {
       siteMeta={{ currentYear }}
     >
       <div className="relative overflow-x-clip text-app-text">
-        <InteractiveDotsBackground />
+        {/* Background isolated so a canvas failure never crashes the page */}
+        <ErrorBoundary fallback={null}>
+          <InteractiveDotsBackground />
+        </ErrorBoundary>
+
         <ScrollProgress />
         <Header navLinks={navLinks} />
 
-        <main>
-          <HeroSection heroContent={heroContent} />
-          <AboutSection
-            aboutParagraphs={aboutParagraphs}
-            profileImage={heroContent.image}
-          />
-          <ExpertiseSection skills={skills} />
-          <ProjectsSection projects={projects} />
-          <AchievementSection achievements={achievements} />
-          <ContactSection formState={formState} />
-        </main>
+        <ErrorBoundary>
+          <main>
+            <HeroSection heroContent={heroContent} />
+            <AboutSection
+              aboutParagraphs={aboutParagraphs}
+              profileImage={heroContent.image}
+            />
+            <ExpertiseSection skills={skills} />
+            <ProjectsSection projects={projects} />
+            <AchievementSection achievements={achievements} />
+            <ContactSection />
+          </main>
+        </ErrorBoundary>
 
-        <Footer currentYear={currentYear} />
+        <Footer />
       </div>
     </AppProvider>
   );

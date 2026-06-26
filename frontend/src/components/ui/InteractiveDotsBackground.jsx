@@ -12,35 +12,13 @@ const InteractiveDotsBackground = () => {
     let dots = [];
     let mouse = { x: null, y: null };
     let rafId = null;
+    let resizeTimer = null;
 
     const spacing = window.innerWidth < 768 ? 32 : 22;
     const radius = window.innerWidth < 768 ? 2.2 : 2.4;
     const interactionRadius = 120;
 
-    // Resize canvas
-    const resizeCanvas = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      generateDots();
-    };
-
-    // Generate grid dots
-    const generateDots = () => {
-      dots = [];
-      for (let x = 0; x < width; x += spacing) {
-        for (let y = 0; y < height; y += spacing) {
-          dots.push({
-            x,
-            y,
-            baseX: x,
-            baseY: y,
-            vx: 0,
-            vy: 0,
-          });
-        }
-      }
-    };
-
+    // Compute dot color once — color never changes at runtime
     const getDotColor = () => {
       const isDark = document.documentElement.classList.contains("dark");
       const raw = getComputedStyle(document.documentElement)
@@ -51,11 +29,36 @@ const InteractiveDotsBackground = () => {
       return `rgba(${r}, ${g}, ${b}, ${alpha})`;
     };
 
-    // Animation loop
+    let dotColor = getDotColor();
+
+    // Generate grid dots
+    const generateDots = () => {
+      dots = [];
+      for (let x = 0; x < width; x += spacing) {
+        for (let y = 0; y < height; y += spacing) {
+          dots.push({ x, y, baseX: x, baseY: y, vx: 0, vy: 0 });
+        }
+      }
+    };
+
+    // Resize canvas — debounced to avoid excessive allocations on fast resize
+    const resizeCanvas = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      generateDots();
+    };
+
+    const handleResize = () => {
+      if (resizeTimer !== null) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resizeCanvas();
+        resizeTimer = null;
+      }, 150);
+    };
+
+    // Animation loop — dotColor is read from the closed-over variable, not recomputed
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
-
-      const dotColor = getDotColor();
 
       dots.forEach((dot) => {
         if (mouse.x !== null && mouse.y !== null) {
@@ -66,17 +69,16 @@ const InteractiveDotsBackground = () => {
           if (distance < interactionRadius) {
             const force = (interactionRadius - distance) / interactionRadius;
             const angle = Math.atan2(dy, dx);
-
             dot.vx += Math.cos(angle) * force * 0.6;
             dot.vy += Math.sin(angle) * force * 0.6;
           }
         }
 
-        // Smooth return (spring effect)
+        // Spring return
         dot.vx += (dot.baseX - dot.x) * 0.02;
         dot.vy += (dot.baseY - dot.y) * 0.02;
 
-        // friction
+        // Friction
         dot.vx *= 0.85;
         dot.vy *= 0.85;
 
@@ -103,18 +105,36 @@ const InteractiveDotsBackground = () => {
       mouse.y = null;
     };
 
+    // Touch events — map touch position to mouse for the repulsion effect
+    const handleTouchMove = (e) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouse.x = null;
+      mouse.y = null;
+    };
+
     resizeCanvas();
     animate();
 
-    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", resizeCanvas);
+      if (resizeTimer !== null) clearTimeout(resizeTimer);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, []);
 

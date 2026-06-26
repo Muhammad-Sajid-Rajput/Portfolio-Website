@@ -23,7 +23,7 @@ const FormTextarea = forwardRef(
     ref,
   ) => {
     return (
-      <label className="block">
+      <label className={`block ${className.includes('flex-1') ? 'flex flex-1 flex-col' : ''}`}>
         {label && (
           <span
             className={
@@ -36,7 +36,7 @@ const FormTextarea = forwardRef(
         {srHidden && !label && <span className="sr-only">{placeholder}</span>}
         <textarea
           ref={ref}
-          className={`ghost-input resize-none ${error ? "border-red-500" : ""} ${className}`.trim()}
+          className={`ghost-input resize-none h-full ${error ? "border-red-500" : ""} ${className}`.trim()}
           name={name}
           placeholder={placeholder}
           value={value}

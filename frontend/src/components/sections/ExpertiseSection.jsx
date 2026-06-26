@@ -3,29 +3,16 @@ import Reveal from "../ui/Reveal";
 import SectionWrapper from "../ui/SectionWrapper";
 import { ANIMATION_DELAYS } from "../../constants/animations";
 
-const SKILL_CATEGORIES = {
-  frontend: {
-    title: "Frontend",
-    skills: [
-      "HTML",
-      "CSS",
-      "Tailwind CSS",
-      "JavaScript",
-      "React.js",
-      "TypeScript",
-      "EJS",
-      "Framer Motion",
-    ],
-  },
-  backend: {
-    title: "Backend & Database",
-    skills: ["Node.js", "Express.js", "MongoDB", "MySQL", "Socket.IO", "JWT"],
-  },
-  tools: {
-    title: "Tools & Languages",
-    skills: ["Vite", "Git", "VS Code", "Java", "C++"],
-  },
+const CATEGORY_META = {
+  frontend: { title: "Frontend" },
+  backend: { title: "Backend" },
+  database: { title: "Databases" },
+  tools: { title: "Tools" },
+  concepts: { title: "Concepts & Architecture" },
 };
+
+// Preserve display order of categories
+const CATEGORY_ORDER = ["frontend", "backend", "database", "tools", "concepts"];
 
 function SkillCard({ skill, index }) {
   return (
@@ -45,20 +32,21 @@ function SkillCard({ skill, index }) {
   );
 }
 
-function SkillCategory({ category, skills }) {
-  const categorySkills = skills.filter((skill) =>
-    SKILL_CATEGORIES[category].skills.includes(skill.name),
-  );
+function SkillCategory({ categoryKey, skills }) {
+  const meta = CATEGORY_META[categoryKey];
+  const categorySkills = skills.filter((skill) => skill.category === categoryKey);
+
+  if (!meta || categorySkills.length === 0) return null;
 
   return (
-    <div className="space-y-4 ">
+    <div className="space-y-4">
       <h3 className="text-subtitle font-semibold text-app-primary">
-        {SKILL_CATEGORIES[category].title}
+        {meta.title}
       </h3>
       <div
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+        className="grid grid-cols-2 gap-3 lg:grid-cols-3"
         role="list"
-        aria-label={`${SKILL_CATEGORIES[category].title} skills`}
+        aria-label={`${meta.title} skills`}
       >
         {categorySkills.map((skill, index) => (
           <SkillCard key={skill.name} skill={skill} index={index} />
@@ -80,9 +68,9 @@ function ExpertiseSection({ skills }) {
     >
       <Reveal>
         <div className="space-y-10">
-          <SkillCategory category="frontend" skills={skills} />
-          <SkillCategory category="backend" skills={skills} />
-          <SkillCategory category="tools" skills={skills} />
+          {CATEGORY_ORDER.map((key) => (
+            <SkillCategory key={key} categoryKey={key} skills={skills} />
+          ))}
         </div>
       </Reveal>
     </SectionWrapper>

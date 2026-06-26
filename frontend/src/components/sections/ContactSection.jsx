@@ -9,6 +9,7 @@ import Button from "../ui/Button";
 import SocialIconLinks from "../ui/SocialIconLinks";
 import { useAppContext } from "../../hooks/useAppContext";
 import { ANIMATION_DELAYS } from "../../constants/animations";
+import useContactForm from "../../hooks/useContactForm";
 
 const cardMetaByLabel = {
   Email: {
@@ -30,7 +31,7 @@ const defaultCardMeta = {
   subtitle: "Reach out anytime.",
 };
 
-function ContactSection({ formState }) {
+function ContactSection() {
   const { contactInfo = [], socialLinks = [] } = useAppContext();
   const {
     formData,
@@ -38,7 +39,7 @@ function ContactSection({ formState }) {
     isSubmitting,
     handleInputChange,
     handleSubmit,
-  } = formState;
+  } = useContactForm();
 
   return (
     <SectionWrapper
@@ -54,11 +55,11 @@ function ContactSection({ formState }) {
       <div className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
         <Reveal className="h-full">
           <GlassCard className="flex h-full flex-col">
-            <div className="flex-1 space-y-4">
+            <div className="flex flex-1 flex-col space-y-4">
               <span className="text-title-lg font-semibold text-app-text">
                 Send Me a Message
               </span>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="flex flex-1 flex-col gap-4">
                 <FormInput
                   name="name"
                   type="text"
@@ -82,7 +83,7 @@ function ContactSection({ formState }) {
                 <FormInput
                   name="subject"
                   type="text"
-                  placeholder="Subject"
+                  placeholder="Subject (optional — appears in message body)"
                   value={formData.subject}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
@@ -94,33 +95,35 @@ function ContactSection({ formState }) {
                   value={formData.message}
                   onChange={handleInputChange}
                   disabled={isSubmitting}
-                  rows={5}
                   required
+                  className="flex-1 min-h-[120px]"
                 />
 
-                {formStatus.message ? (
-                  <p
-                    className={`text-body-sm ${
-                      formStatus.type === "success"
-                        ? "text-app-success"
-                        : "text-app-error"
-                    }`}
-                    aria-live="polite"
-                  >
-                    {formStatus.message}
-                  </p>
-                ) : null}
+                <div>
+                  {formStatus.message ? (
+                    <p
+                      className={`mb-3 text-body-sm ${
+                        formStatus.type === "success"
+                          ? "text-app-success"
+                          : "text-app-error"
+                      }`}
+                      aria-live="polite"
+                    >
+                      {formStatus.message}
+                    </p>
+                  ) : null}
 
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="large"
-                  icon="mdi:send-outline"
-                  disabled={isSubmitting}
-                  className="w-full py-3.5"
-                >
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </Button>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    size="large"
+                    icon="mdi:send-outline"
+                    disabled={isSubmitting}
+                    className="w-full py-3.5"
+                  >
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </Button>
+                </div>
               </form>
             </div>
           </GlassCard>

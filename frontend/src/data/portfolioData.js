@@ -1,15 +1,16 @@
 import rockPaperScissorsImage from "../assets/images/rock-paper-scissors.svg";
 import unirideImage from "../assets/images/Uniride.webp";
 import pizzaPalaceImage from "../assets/images/Pizza-Palace.webp";
-import profileImage from "../assets/images/Profile-Picture.jpg";
+import profileImage from "../assets/images/Profile-Picture.webp";
 import ecommerceImage from "../assets/images/E-commerce.webp";
 
 export const heroContent = {
   name: "Muhammad Sajid",
-  role: "Frontend Dev",
-  tagline: "Solving complex problems with elegant digital solutions.",
+  role: "Full-Stack MERN Developer",
+  tagline:
+    "Building scalable web applications with clean architecture and exceptional user experiences.",
   summary:
-    "I craft responsive, user-centered experiences using modern frontend tooling, clean architecture, and motion that feels intentional.",
+    "Software Engineering student and Full-Stack MERN Developer passionate about creating production-ready web applications. I specialize in React, Node.js, Express, and MongoDB — building secure, responsive, and high-performance applications with modern development practices.",
   image: profileImage,
 };
 
@@ -23,65 +24,50 @@ export const navLinks = [
 ];
 
 export const aboutParagraphs = [
-  "I'm a Frontend Developer passionate about building clean, responsive, and user-centered web interfaces.",
-  "I specialize in JavaScript, React, EJS, and modern styling frameworks like Tailwind CSS to create fast, accessible, and visually engaging websites.",
-  "I also have strong fundamentals in Java, C++, Data Structures and Algorithms, and relational databases with MySQL.",
-  "Whether building from scratch or refining an existing interface, I focus on performance, accessibility, and code clarity.",
-];
-
-export const aboutFeatureCards = [
-  {
-    title: "Modern Tooling",
-    description:
-      "Building with React, Tailwind CSS, and modular component architecture for scalable frontends.",
-  },
-  {
-    title: "Precision Design",
-    description:
-      "Converting static concepts into responsive, polished interfaces with strong visual hierarchy.",
-  },
-  {
-    title: "Agile Mindset",
-    description:
-      "Rapid iteration, clean code, and collaborative execution from planning to delivery.",
-  },
-];
-
-export const aboutStats = [
-  {
-    value: "3+",
-    label: "Years Learning & Building",
-    tone: "text-app-tertiary",
-  },
-  { value: "20+", label: "Projects Delivered", tone: "text-app-secondary" },
+  "I'm a Full-Stack MERN Developer and Software Engineering student passionate about building scalable, user-focused web applications from idea to deployment.",
+  "My expertise includes React, Node.js, Express.js, MongoDB, REST APIs, JWT authentication, and responsive frontend development using Tailwind CSS.",
+  "I enjoy designing clean architectures, solving real-world problems, and creating applications that balance performance, maintainability, and great user experience.",
+  "Through projects including an e-commerce platform, pizza ordering system, and real-time ride-sharing application, I've gained practical experience with authentication, WebSockets, role-based access control, database design, and modern software engineering practices.",
 ];
 
 export const skills = [
-  { name: "HTML", icon: "devicon:html5" },
-  { name: "CSS", icon: "devicon:css3" },
-  { name: "Tailwind CSS", icon: "devicon:tailwindcss" },
-  { name: "JavaScript", icon: "logos:javascript" },
-  { name: "React.js", icon: "logos:react" },
-  { name: "TypeScript", icon: "logos:typescript-icon" },
-  { name: "Node.js", icon: "logos:nodejs" },
-  { name: "Express.js", icon: "devicon:express" },
-  { name: "MongoDB", icon: "devicon:mongodb" },
-  { name: "MySQL", icon: "logos:mysql" },
-  { name: "EJS", icon: "devicon:ejs" },
-  { name: "Socket.IO", icon: "simple-icons:socketdotio" },
-  { name: "JWT", icon: "simple-icons:jwt" },
-  { name: "Vite", icon: "logos:vitejs" },
-  { name: "Framer Motion", icon: "simple-icons:framer" },
-  { name: "Git", icon: "logos:git-icon" },
-  { name: "VS Code", icon: "logos:visual-studio-code" },
-  { name: "Java", icon: "devicon:java" },
-  { name: "C++", icon: "devicon:cplusplus" },
+  // Frontend
+  { name: "React.js", icon: "logos:react", category: "frontend" },
+  { name: "JavaScript (ES6+)", icon: "logos:javascript", category: "frontend" },
+  { name: "HTML5", icon: "devicon:html5", category: "frontend" },
+  { name: "CSS3", icon: "devicon:css3", category: "frontend" },
+  { name: "Tailwind CSS", icon: "devicon:tailwindcss", category: "frontend" },
+  { name: "EJS", icon: "devicon:ejs", category: "frontend" },
+
+  // Backend
+  { name: "Node.js", icon: "logos:nodejs", category: "backend" },
+  { name: "Express.js", icon: "devicon:express", category: "backend" },
+  { name: "RESTful API Design", icon: "mdi:api", category: "backend" },
+  { name: "Socket.IO", icon: "simple-icons:socketdotio", category: "backend" },
+  { name: "JWT Authentication", icon: "simple-icons:jwt", category: "backend" },
+
+  // Databases
+  { name: "MongoDB", icon: "devicon:mongodb", category: "database" },
+  { name: "MySQL", icon: "logos:mysql", category: "database" },
+
+  // Tools
+  { name: "Git", icon: "logos:git-icon", category: "tools" },
+  { name: "GitHub", icon: "mdi:github", category: "tools" },
+  { name: "Vite", icon: "logos:vitejs", category: "tools" },
+  { name: "VS Code", icon: "logos:visual-studio-code", category: "tools" },
+
+  // Concepts
+  { name: "MVC Architecture", icon: "mdi:sitemap", category: "concepts" },
+  { name: "Role-Based Access Control", icon: "mdi:shield-account", category: "concepts" },
+  { name: "Responsive Design", icon: "mdi:responsive", category: "concepts" },
+  { name: "OOP", icon: "mdi:cube-outline", category: "concepts" },
 ];
 
 export const projects = [
   {
+    id: "uniride",
     title: "Uni Ride - Ride Sharing Website",
-    dateRange: "Jan 2025 – Feb 2025",
+    dateRange: "Jan 2025 - Feb 2025",
     description:
       "UniRide is a university-based carpooling website that connects students for shared rides. Users can create, join, or cancel rides in real-time, view ride history, and receive instant updates.",
     image: unirideImage,
@@ -96,10 +82,10 @@ export const projects = [
       "Tailwind CSS",
     ],
   },
-
   {
+    id: "pizza-palace",
     title: "Pizza Palace",
-    dateRange: "Mar 2026 – Apr 2026",
+    dateRange: "Mar 2026 - Apr 2026",
     description:
       "A full-stack pizza ordering platform built with React and Node.js, featuring secure JWT authentication, a dynamic pizza builder, live order tracking, and a role-based admin dashboard. Includes automated inventory management with low-stock email alerts and a structured order lifecycle system.",
     image: pizzaPalaceImage,
@@ -115,11 +101,12 @@ export const projects = [
     ],
   },
   {
+    id: "ecommerce",
     title: "Full-Stack E-Commerce Application (Amazon Clone)",
     dateRange: "Apr 2026",
     description:
       "A production-ready full-stack e-commerce platform inspired by Amazon. Features include product browsing and search, shopping cart management, seamless checkout flow, order tracking, and responsive UI. Built with a modern React frontend and a robust Express.js backend using Sequelize ORM and SQLite database.",
-    image: ecommerceImage, 
+    image: ecommerceImage,
     github: "https://github.com/Muhammad-Sajid-Rajput/ecommerce-project",
     technologies: [
       "React",
@@ -132,6 +119,7 @@ export const projects = [
     ],
   },
   {
+    id: "rock-paper-scissors",
     title: "Rock Paper Scissor",
     dateRange: "Jan 2024",
     description:
@@ -145,7 +133,7 @@ export const projects = [
 export const achievements = [
   {
     id: "bachelors-software-engineering",
-    range: "2022 - 2026",
+    range: "2022-2026",
     title: "Bachelor's in Software Engineering",
     organization: "Mehran University of Engineering and Technology, Jamshoro",
     summary:
@@ -158,7 +146,7 @@ export const achievements = [
   },
   {
     id: "hack-for-humanity-2025",
-    range: "Jan - Feb 2025",
+    range: "Jan-Feb 2025",
     title: "Hack for Humanity - 2025",
     organization: "DevPost",
     summary:

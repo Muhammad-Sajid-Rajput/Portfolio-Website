@@ -69,8 +69,8 @@ export default {
         },
       },
       boxShadow: {
-        ambient: "0 18px 46px rgba(0, 0, 0, 0.45), 0 0 30px rgba(195, 216, 9, 0.08)",
-        glow: "0 0 20px rgba(195, 216, 9, 0.25)",
+        ambient: "0 18px 46px rgba(0, 0, 0, 0.45), 0 0 30px rgba(var(--app-primary) / 0.08)",
+        glow: "0 0 20px rgba(var(--app-primary) / 0.25)",
       },
       keyframes: {
         float: {

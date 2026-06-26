@@ -13,11 +13,12 @@ function HeroSection({ heroContent }) {
   const { rotate, handleMouseMove, resetTilt } = useTiltAnimation();
 
   return (
-    <section id="home" className="relative overflow-hidden">
+    <section id="home" className="relative flex min-h-dvh flex-col overflow-hidden">
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-ethereal-radial opacity-70" />
 
-      <div className="section-shell hero-shell flex flex-col items-center justify-center gap-16 lg:gap-20">
+      {/* Main content — grows to fill available space and centers vertically */}
+      <div className="section-shell hero-shell flex flex-1 flex-col items-center justify-center gap-16 lg:gap-20">
         {/* CONTENT WRAPPER - Centered Grid */}
         <div className="w-full grid items-center gap-11 lg:grid-cols-[1.1fr_1.1fr] lg:gap-28 max-w-6xl mx-auto">
           {/* LEFT */}
@@ -47,9 +48,10 @@ function HeroSection({ heroContent }) {
                 <span className="text-app-primary font-semibold">
                   <Typewriter
                     words={[
-                      "Web Development",
-                      "UI/UX Design",
-                      "Frontend Engineering",
+                      "Full-Stack Development",
+                      "MERN Stack Apps",
+                      "REST API Design",
+                      "Real-Time Systems",
                     ]}
                     loop={0}
                     cursor
@@ -104,7 +106,7 @@ function HeroSection({ heroContent }) {
                 {/* Image */}
                 <img
                   src={faviconAvatar}
-                  alt="Avatar"
+                  alt={heroContent.name}
                   loading="eager"
                   className="relative h-full w-full object-cover"
                 />
@@ -114,8 +116,8 @@ function HeroSection({ heroContent }) {
         </div>
       </div>
 
-      {/* Scroll Button */}
-      <div className="flex items-center justify-center pt-12">
+      {/* Scroll Button — pinned to bottom, always visible within the viewport */}
+      <div className="flex items-center justify-center pb-8">
         <a
           href="#about"
           className="group inline-flex items-center justify-center rounded-full border border-app-outline/40 bg-app-surface/60 p-3 text-app-text backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-app-primary/50 hover:text-app-primary hover:shadow-[0_0_20px_rgba(195,216,9,0.32)] animate-bounce"

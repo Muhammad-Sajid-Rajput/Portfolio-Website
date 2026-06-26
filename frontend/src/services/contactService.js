@@ -50,15 +50,6 @@ export function validateContactForm(formData) {
 }
 
 /**
- * Compose message with subject line if provided
- */
-export function composeContactMessage(sanitizedData) {
-  return sanitizedData.subject
-    ? `Subject: ${sanitizedData.subject}\n\n${sanitizedData.message}`
-    : sanitizedData.message;
-}
-
-/**
  * Submit contact form to API
  */
 export async function submitContact(formData) {
@@ -69,15 +60,14 @@ export async function submitContact(formData) {
     throw new Error(validation.message);
   }
 
-  const composedMessage = composeContactMessage(sanitized);
-
   const response = await fetch(API_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       name: sanitized.name,
       email: sanitized.email,
-      message: composedMessage,
+      subject: sanitized.subject,
+      message: sanitized.message,
     }),
   });
 
