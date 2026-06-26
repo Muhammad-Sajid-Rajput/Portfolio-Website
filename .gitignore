@@ -35,3 +35,13 @@ lerna-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# OS
+Thumbs.db
+
+# Coverage / test output
+coverage/
+frontend/coverage/
+
+# Vite cache
+frontend/.vite/

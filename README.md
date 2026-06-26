@@ -1,41 +1,62 @@
-# Portfolio Website
+# Muhammad Sajid — Portfolio Website
 
-A personal portfolio website built with React, Vite, Tailwind CSS, and a small Express backend for the contact form.
+**Live:** https://portfolio-website-kappa-orpin-99.vercel.app
+
+A personal portfolio website built with React, Vite, Tailwind CSS, and an Express backend for the contact form.
 
 ## Overview
 
-The frontend presents a single-page portfolio with sections for the hero, about, skills, projects, achievements, and contact details. The backend handles contact form submissions and sends email through the Resend API.
+Single-page portfolio for a Full-Stack MERN Developer. Sections include hero, about, skills, projects, achievements, and contact. The Express backend handles contact form submissions and sends emails via the Resend API.
 
 ## Tech Stack
 
-- React 19
-- Vite
+**Frontend**
+- React 19 + Vite
 - Tailwind CSS
 - Framer Motion
 - Iconify
-- Express
-- Resend
+
+**Backend**
+- Node.js + Express
+- Resend (email API)
+- express-rate-limit
 
 ## Features
 
-- Responsive single-page layout
-- Animated hero and section reveals
-- Project showcase with card-based navigation
-- Contact form with validation and rate limiting
-- Reusable UI components and shared portfolio data
+- Fully responsive single-page layout
+- Animated hero with interactive dot canvas background
+- Skill categories: Frontend, Backend, Databases, Tools, Concepts
+- Project showcase with paginated grid (desktop) and full list (mobile)
+- Contact form with client + server validation, rate limiting, and email delivery
+- Scroll-aware navbar with mobile icon nav
+- Error boundaries around canvas and main content
+- Request logging on the backend
 
 ## Project Structure
 
 ```text
 Portfolio-Website/
   backend/
-    server.js
+    server.js          # Express server — contact API + email
+    .env.example       # Environment variable template
     package.json
   frontend/
     public/
+      icon.png         # Browser tab favicon
+      resume.pdf
     src/
+      assets/          # Images
+      components/      # Layout, sections, UI components
+      constants/       # Animation + UI constants
+      context/         # AppContext provider
+      data/            # portfolioData.js — all content lives here
+      hooks/           # useContactForm, useTiltAnimation, useAppContext
+      services/        # contactService.js
+      utils/           # navigation helpers
     index.html
+    tailwind.config.js
     vite.config.js
+  package.json         # Root — runs both apps with concurrently
   README.md
 ```
 
@@ -43,7 +64,7 @@ Portfolio-Website/
 
 ### Prerequisites
 
-- Node.js 18 or newer
+- Node.js 18+
 - npm
 
 ### Install Dependencies
@@ -61,31 +82,13 @@ npm install --prefix backend
 npm install --prefix frontend
 ```
 
-### Run in Development
+### Environment Setup
 
-Start both apps together from the repository root:
-
-```bash
-npm run dev
-```
-
-Frontend development server:
+Copy the backend example env and fill in your values:
 
 ```bash
-npm run dev:frontend
+cp backend/.env.example backend/.env
 ```
-
-Backend development server:
-
-```bash
-npm run dev:backend
-```
-
-The frontend runs on `http://localhost:5173` and proxies `/api` requests to the backend on `http://localhost:5000`.
-
-## Backend Environment Variables
-
-Create a backend `.env` file with the Resend settings required for sending contact emails:
 
 ```env
 PORT=5000
@@ -94,15 +97,40 @@ CONTACT_RECEIVER=you@example.com
 RESEND_API_KEY=re_your_resend_api_key
 ```
 
-The backend validates `CONTACT_RECEIVER` on startup and returns `503` from the contact endpoint until `RESEND_API_KEY` is configured.
+> Both `CONTACT_RECEIVER` and `RESEND_API_KEY` are validated at startup — the server will not boot without them.
 
-## Build
+### Run in Development
 
-Build the frontend for production:
+Start both apps from the repository root:
+
+```bash
+npm run dev
+```
+
+Or individually:
+
+```bash
+npm run dev:frontend   # http://localhost:5173
+npm run dev:backend    # http://localhost:5000
+```
+
+The frontend proxies `/api` requests to the backend in development.
+
+### Build
 
 ```bash
 npm run build --prefix frontend
 ```
+
+## Customisation
+
+All portfolio content — name, role, about text, skills, projects, achievements, social links, and contact info — is defined in a single file:
+
+```
+frontend/src/data/portfolioData.js
+```
+
+Edit that file to update any content without touching component code.
 
 ## Contact
 
@@ -112,4 +140,4 @@ npm run build --prefix frontend
 
 ## License
 
-This project is licensed under the MIT License.
+MIT
