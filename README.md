@@ -1,6 +1,6 @@
-# Muhammad Sajid — Portfolio Website
+# Muhammad Sajid Portfolio Website
 
-**Live:** https://portfolio-website-kappa-orpin-99.vercel.app
+**Live:** https://muhammadsajid.dev
 
 A personal portfolio website built with React, Vite, Tailwind CSS, and an Express backend for the contact form.
 
