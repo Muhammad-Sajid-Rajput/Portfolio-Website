@@ -65,7 +65,17 @@ main {
 
 #home {
   scroll-margin-top: var(--section-offset);
-  min-height: calc(100vh - var(--section-offset));
+  height: calc(100dvh - var(--section-offset));
+  min-height: 0;
+  max-height: calc(100dvh - var(--section-offset));
+  overflow: hidden;
+}
+
+@media (max-width: 639px) {
+  #home {
+    height: calc(100svh - var(--section-offset));
+    max-height: calc(100svh - var(--section-offset));
+  }
 }
 
 ::selection {
@@ -123,6 +133,52 @@ main {
   .ghost-input:focus {
     box-shadow: 0 0 0 3px rgba(249, 206, 52, 0.12);
   }
+
+  /* ── Project Slider ─────────────────────────────────────── */
+
+  /* Single flex row containing all page groups */
+  .slider-track {
+    display: flex;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+
+  /* Each page group — dimmed when not active */
+  .slider-item {
+    flex: none;
+    opacity: 0.55;
+    transform: scale(0.97);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+
+  .slider-item.active {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* When a card is expanded, only let that card grow; keep other cards at their natural collapsed height */
+  .slider-item:has(.expanded) {
+    align-items: start;
+  }
+  .slider-item:has(.expanded) a:not(:has(.expanded)) {
+    height: auto;
+  }
+
+  /* Morphing navigation dot */
+  .slider-dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+    display: block;
+  }
+
+  .slider-dot.active {
+    width: 24px;
+  }
 }
 
 .shadow-ambient {
@@ -133,8 +189,8 @@ main {
 
 @media (max-width: 640px) {
   :root {
-    --hero-block-start: clamp(1.75rem, 4.2vh, 2.5rem);
-    --hero-block-end: clamp(1.25rem, 3vh, 2rem);
+    --hero-block-start: clamp(0.75rem, 2vh, 1.5rem);
+    --hero-block-end: clamp(0.75rem, 2vh, 1.5rem);
   }
 }
 

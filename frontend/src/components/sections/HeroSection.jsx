@@ -13,17 +13,17 @@ function HeroSection({ heroContent }) {
   const { rotate, handleMouseMove, resetTilt } = useTiltAnimation();
 
   return (
-    <section id="home" className="relative flex min-h-dvh flex-col overflow-hidden">
+    <section id="home" className="relative flex h-full flex-col overflow-hidden">
       {/* Background */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-ethereal-radial opacity-70" />
 
       {/* Main content — grows to fill available space and centers vertically */}
-      <div className="section-shell hero-shell flex flex-1 flex-col items-center justify-center gap-16 lg:gap-20">
+      <div className="section-shell hero-shell flex flex-1 flex-col items-center justify-center gap-2 sm:gap-4 lg:gap-16 py-0 sm:py-2">
         {/* CONTENT WRAPPER - Centered Grid */}
-        <div className="w-full grid items-center gap-11 lg:grid-cols-[1.1fr_1.1fr] lg:gap-28 max-w-6xl mx-auto">
+        <div className="w-full grid items-center gap-4 sm:gap-6 md:gap-8 lg:grid-cols-[1.1fr_1.1fr] lg:gap-28 max-w-6xl mx-auto">
           {/* LEFT */}
           <Reveal>
-            <div className="space-y-8">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-8">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 rounded-full border border-app-primary/25 bg-app-primary/10 px-3.5 py-1.5 text-overline font-semibold uppercase text-app-primary backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
@@ -34,7 +34,7 @@ function HeroSection({ heroContent }) {
               </div>
 
               {/* Heading */}
-              <h1 className="text-display font-bold text-app-text leading-tight">
+              <h1 className="font-bold text-app-text leading-tight" style={{ fontSize: 'clamp(1.6rem, 5vw + 0.5rem, 2.5rem)', letterSpacing: '-0.025em', lineHeight: '1.12' }}>
                 {heroContent.name}
                 <br />
                 <span className="bg-gradient-to-r from-app-primary via-app-primaryDim to-app-primaryDim bg-clip-text text-transparent">
@@ -43,7 +43,7 @@ function HeroSection({ heroContent }) {
               </h1>
 
               {/* Typing Animation */}
-              <p className="max-w-xl text-lead text-app-muted">
+              <p className="max-w-xl text-app-muted" style={{ fontSize: 'clamp(0.9rem, 2.5vw + 0.3rem, 1.03125rem)', lineHeight: '1.6' }}>
                 I Am Into{" "}
                 <span className="text-app-primary font-semibold">
                   <Typewriter
@@ -62,12 +62,12 @@ function HeroSection({ heroContent }) {
                   />
                 </span>
               </p>
-              <p className="max-w-xl text-body text-app-muted">
+              <p className="hidden sm:block max-w-xl text-body text-app-muted">
                 Building robust, scalable, and efficient web solutions
               </p>
 
               {/* Social Links */}
-              <div className="flex items-center gap-3 pt-2">
+              <div className="flex items-center gap-3 pt-1 sm:pt-2">
                 <SocialIconLinks
                   links={socialLinks}
                   linkClassName="group inline-flex h-10 w-10 items-center justify-center rounded-full border border-app-outline/30 bg-app-surface/60 text-lg text-app-text backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-app-primary/40 hover:text-app-primary hover:shadow-[0_0_15px_rgba(195,216,9,0.3)]"
@@ -87,8 +87,8 @@ function HeroSection({ heroContent }) {
                   rotateY: rotate.y,
                 }}
                 transition={SPRING_CONFIGS.TILT}
-                style={{ perspective: 1000 }}
-                className="relative h-80 w-80 overflow-hidden rounded-full sm:h-96 sm:w-96 cursor-pointer shadow-ambient"
+                style={{ perspective: 1000, width: 'min(38vw, 35vh)', height: 'min(38vw, 35vh)' }}
+                className="relative overflow-hidden rounded-full sm:!w-72 sm:!h-72 md:!w-80 md:!h-80 lg:!w-96 lg:!h-96 cursor-pointer shadow-ambient"
               >
                 {/* Decorative Circles - Premium Look */}
                 <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full border border-app-primary/15 blur-sm" />
@@ -117,7 +117,7 @@ function HeroSection({ heroContent }) {
       </div>
 
       {/* Scroll Button — pinned to bottom, always visible within the viewport */}
-      <div className="flex items-center justify-center pb-8">
+      <div className="flex items-center justify-center pb-4 lg:pb-8">
         <a
           href="#about"
           className="group inline-flex items-center justify-center rounded-full border border-app-outline/40 bg-app-surface/60 p-3 text-app-text backdrop-blur-md transition-all duration-300 hover:scale-110 hover:border-app-primary/50 hover:text-app-primary hover:shadow-[0_0_20px_rgba(195,216,9,0.32)] animate-bounce"

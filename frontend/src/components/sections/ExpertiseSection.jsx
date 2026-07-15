@@ -7,12 +7,13 @@ const CATEGORY_META = {
   frontend: { title: "Frontend" },
   backend: { title: "Backend" },
   database: { title: "Databases" },
-  tools: { title: "Tools" },
+  ai: { title: "AI & Data" },
+  tools: { title: "Tools & DevOps" },
   concepts: { title: "Concepts & Architecture" },
 };
 
 // Preserve display order of categories
-const CATEGORY_ORDER = ["frontend", "backend", "database", "tools", "concepts"];
+const CATEGORY_ORDER = ["frontend", "backend", "database", "ai", "tools", "concepts"];
 
 function SkillCard({ skill, index }) {
   return (
@@ -44,7 +45,7 @@ function SkillCategory({ categoryKey, skills }) {
         {meta.title}
       </h3>
       <div
-        className="grid grid-cols-2 gap-3 lg:grid-cols-3"
+        className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4"
         role="list"
         aria-label={`${meta.title} skills`}
       >
