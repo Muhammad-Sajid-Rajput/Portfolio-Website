@@ -18,12 +18,12 @@ function HeroSection({ heroContent }) {
       <div className="pointer-events-none absolute inset-0 -z-10 bg-ethereal-radial opacity-70" />
 
       {/* Main content — grows to fill available space and centers vertically */}
-      <div className="section-shell hero-shell flex flex-1 flex-col items-center justify-center gap-2 sm:gap-4 lg:gap-16 py-0 sm:py-2">
+      <div className="section-shell hero-shell flex flex-1 flex-col items-center justify-center gap-6 sm:gap-8 lg:gap-16 py-0 sm:py-2">
         {/* CONTENT WRAPPER - Centered Grid */}
-        <div className="w-full grid items-center gap-4 sm:gap-6 md:gap-8 lg:grid-cols-[1.1fr_1.1fr] lg:gap-28 max-w-6xl mx-auto">
+        <div className="w-full grid items-center gap-6 sm:gap-8 md:gap-10 lg:grid-cols-[1.1fr_1.1fr] lg:gap-28 max-w-6xl mx-auto">
           {/* LEFT */}
           <Reveal>
-            <div className="space-y-3 sm:space-y-4 lg:space-y-8">
+            <div className="space-y-4 sm:space-y-6 lg:space-y-8">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 rounded-full border border-app-primary/25 bg-app-primary/10 px-3.5 py-1.5 text-overline font-semibold uppercase text-app-primary backdrop-blur-md">
                 <span className="relative flex h-2 w-2">
@@ -34,7 +34,7 @@ function HeroSection({ heroContent }) {
               </div>
 
               {/* Heading */}
-              <h1 className="font-bold text-app-text leading-tight" style={{ fontSize: 'clamp(1.6rem, 5vw + 0.5rem, 2.5rem)', letterSpacing: '-0.025em', lineHeight: '1.12' }}>
+              <h1 className="text-display font-bold text-app-text leading-tight">
                 {heroContent.name}
                 <br />
                 <span className="bg-gradient-to-r from-app-primary via-app-primaryDim to-app-primaryDim bg-clip-text text-transparent">
@@ -43,7 +43,7 @@ function HeroSection({ heroContent }) {
               </h1>
 
               {/* Typing Animation */}
-              <p className="max-w-xl text-app-muted" style={{ fontSize: 'clamp(0.9rem, 2.5vw + 0.3rem, 1.03125rem)', lineHeight: '1.6' }}>
+              <p className="max-w-xl text-lead text-app-muted">
                 I Am Into{" "}
                 <span className="text-app-primary font-semibold">
                   <Typewriter
@@ -62,7 +62,7 @@ function HeroSection({ heroContent }) {
                   />
                 </span>
               </p>
-              <p className="hidden sm:block max-w-xl text-body text-app-muted">
+              <p className="max-w-xl text-body text-app-muted">
                 Building robust, scalable, and efficient web solutions
               </p>
 
@@ -87,8 +87,8 @@ function HeroSection({ heroContent }) {
                   rotateY: rotate.y,
                 }}
                 transition={SPRING_CONFIGS.TILT}
-                style={{ perspective: 1000, width: 'min(38vw, 35vh)', height: 'min(38vw, 35vh)' }}
-                className="relative overflow-hidden rounded-full sm:!w-72 sm:!h-72 md:!w-80 md:!h-80 lg:!w-96 lg:!h-96 cursor-pointer shadow-ambient"
+                style={{ perspective: 1000 }}
+                className="relative h-56 w-56 sm:h-72 sm:w-72 md:h-80 md:w-80 lg:h-96 lg:w-96 overflow-hidden rounded-full cursor-pointer shadow-ambient"
               >
                 {/* Decorative Circles - Premium Look */}
                 <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full border border-app-primary/15 blur-sm" />
