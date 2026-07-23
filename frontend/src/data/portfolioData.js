@@ -208,7 +208,7 @@ export const projects = [
     description:
       "Premium weather app with a magazine-style editorial layout, live-ticking local clock, dynamic atmospheric backgrounds, geolocation, bookmarked favorites, hourly forecasts, air quality, UV index, and astronomy highlights. Backed by a Node.js/Express API gateway with Vitest unit tests.",
     image: climateXImage,
-    github: "https://github.com/Muhammad-Sajid-Rajput",
+    github: "https://weather.muhammadsajid.dev",
     technologies: [
       "React (Vite)",
       "Tailwind CSS",
